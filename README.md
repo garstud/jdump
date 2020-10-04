@@ -135,7 +135,7 @@ This will show :
 
 Troubles?
 ------------
-You find some issues with theis specific version of JDump?
+You find some issues with this specific version of JDump?
 Ok, [go and post a commented issue](https://github.com/garstud/jdump/issues/new), i will have a look and try to help you ;) 
 
 
