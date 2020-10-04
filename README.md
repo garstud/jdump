@@ -132,6 +132,13 @@ This will show :
 ![jdump-reflection_class](https://cloud.githubusercontent.com/assets/970021/11407200/92e255ea-93b1-11e5-979e-9ad64dabffd9.png)
 
 
+
+Troubles?
+------------
+You find some issues with theis specific version of JDump?
+Ok, [go and post a commented issue](https://github.com/garstud/jdump/issues/new), i will have a look and try to help you ;) 
+
+
 Originals Contributors
 -------------
 
