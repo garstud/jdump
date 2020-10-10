@@ -95,7 +95,8 @@ In that case, you can add an IF test with '**if(function_exists("dump"))**' just
 if(function_exists("dump")) dump($myVar, "My Var is");
 
 ```
-You also can complete this sentence by adding the class name, the fucntion and the line number by using this syntax:
+
+You can also complete this sentence by adding the class name, function and line number using this syntax:
 ```php
 // ensure dump() is accessible and show class, function and line number
 if(function_exists("dump")) dump($myVar, __CLASS__."::".__FUNCTION__."(#".__LINE__.") My Var is");
@@ -119,7 +120,7 @@ $query->from('#__users');
 $query->order('username DESC');
 
 // display the content of an SQL query
-dump($query->__toString(), "My SQL query to read users");
+if(function_exists("dump")) dump($query->__toString(), "My SQL query to read users");
 
 ```
 
@@ -127,8 +128,8 @@ This will show :
 "SELECT id, name, email FROM #__users ORDER BY username DESC"
 
 
-**Note:** If your SQL request is too long, perhaps JDump will cut the display.
-You can change the length of a variable in the dump window by chanhing the JDump component paramter in admin that is called "**Maximum String Length**".
+**Note:** If your SQL query is too long, maybe JDump will cut the display.
+You can change the length of a variable in the dump window by changing the parameter of the JDump component in admin called "**Maximum String Length**".
 
 
 
