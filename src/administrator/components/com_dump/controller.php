@@ -9,7 +9,9 @@
  */
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-class DumpController extends JControllerLegacy{
+jimport('joomla.application.component.controller');
+
+class DumpController extends JControllerLegacy {
 
     function display($cachable = false, $urlparams = false) {
         $mainframe = JFactory::getApplication(); $option = JRequest::getCmd('option');
@@ -17,8 +19,8 @@ class DumpController extends JControllerLegacy{
         
 
         // we need to add these paths so the component can work in both site and administrator
-        $this->addViewPath( JPATH_COMPONENT_ADMINISTRATOR . '/views' );
-        $this->addModelPath( JPATH_COMPONENT_ADMINISTRATOR . '/models' );
+        $this->addViewPath( JPATH_COMPONENT_ADMINISTRATOR . DS . 'views' );
+        $this->addModelPath( JPATH_COMPONENT_ADMINISTRATOR . DS . 'models' );
 
         // get some vars
         $document   = JFactory::getDocument();
