@@ -2,16 +2,16 @@
 <extension version="3.0" type="plugin" group="system" method="upgrade">
 	<name>J!Dump</name>
 	<author>Mathias Verraes</author>
-	<creationDate>%%TODAY%%</creationDate>
-	<copyright>(c) Mathias Verraes 2006 - 2011</copyright>
-	<license>GNU/GPL</license>
-	<authorEmail></authorEmail>
-	<authorUrl>https://github.com/mathiasverraes/jdump</authorUrl>
-	<version>%%VERSION%%</version>
+    <creationDate>04/03/2016</creationDate>
+    <copyright>(c) Mathias Verraes 2006 - 2011</copyright>
+    <license>GNU/GPL</license>
+    <authorEmail></authorEmail>
+    <authorUrl>https://github.com/mathiasverraes/jdump</authorUrl>
+    <version>1.3.2</version>
 	<description>
 	<![CDATA[
 		J!Dump Plugin -- This plugin requires the J!Dump component to function. 
-		Don't forget to <a href="index.php?option=com_plugins&view=plugins&filter_folder=system">publish this plugin!</a>
+		Don't forget to <a href="index.php?option=com_plugins&view=plugins">publish this plugin!</a>
 	]]>
 	</description>
 	<files>
