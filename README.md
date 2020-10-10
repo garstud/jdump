@@ -113,6 +113,17 @@ In that case, you can add a IF test with 'if(function_exists("dump"))' just befo
 if(function_exists("dump")) dump($myVar, "My Var is");
 
 ```
+You also can complete this sentence by adding the class name, the fucntion and the line number by using this syntax:
+```php
+// ensure dump() is accessible and show class, function and line number
+if(function_exists("dump")) dump($myVar, __CLASS__."::".__FUNCTION__."(#".__LINE__.") My Var is");
+
+```
+This will show :
+
+![jdump-complete_label_syntax](https://raw.githubusercontent.com/garstud/jdump/master/res/jdump_complete_label-syntax.png)
+
+
 
 Tip 3 :
 ------------
@@ -122,14 +133,14 @@ Execute the Reflection process on the name of the class set in parameter (ex : J
 Call the JDump method getFileName() method on the resulted object and it's done !
 
 ```php
-// get the path of a PHP script Object
+// get the path of a PHP script class
 $ref = new ReflectionClass('JModuleHelper');
-dump($ref->getFileName(), 'Reflection Class path for '.$ref->getName());
+if(function_exists("dump")) dump($ref->getFileName(), 'Reflection Class path for '.$ref->getName());
 
 ```
 This will show :
 
-![jdump-reflection_class](https://cloud.githubusercontent.com/assets/970021/11407200/92e255ea-93b1-11e5-979e-9ad64dabffd9.png)
+![jdump-reflection_class](https://raw.githubusercontent.com/garstud/jdump/master/res/jdump_reflection.png)
 
 
 
