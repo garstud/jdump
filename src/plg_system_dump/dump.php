@@ -1,0 +1,160 @@
+<?php
+/**
+ * J!Dump
+ * @version      $Id$
+ * @package      jdump
+ * @copyright    Copyright (C) 2007 Mathias Verraes. All rights reserved.
+ * @license      GNU/GPL
+ * @link         https://github.com/mathiasverraes/jdump
+ */
+defined( '_JEXEC' ) or die( 'Restricted access' );
+
+jimport( 'joomla.event.helper' );
+
+if (!defined('DS')) define('DS', DIRECTORY_SEPARATOR);
+
+if( file_exists( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_dump'.DS.'helper.php' ) ) {
+    require_once( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_dump'.DS.'helper.php' );
+    require_once( JPATH_ADMINISTRATOR.DS.'components'.DS.'com_dump'.DS.'defines.php' );
+} else {
+    JError::raiseNotice( 20, 'The J!Dump Plugin needs the J!Dump Component to function.' );
+}
+
+class plgSystemDump extends JPlugin {
+    function __construct(& $subject, $params) {
+		// get the restricted IPs if set in the component parameters
+		$com_params = JComponentHelper::getParams('com_dump');
+		$checkforIP = $com_params->get('dump_ip');
+		// get my current IP
+		$userIP = $_SERVER['REMOTE_ADDR'];
+		$checkforIP = $checkforIP ? explode(',',$checkforIP) : false;
+		// authorize the display if param 'dump_ip' is empty or the current IP is authorized
+		if (!$checkforIP || in_array($userIP,$checkforIP) ) {
+			define("IP_ALLOWED_JDUMP", true);
+		} else {
+			define("IP_ALLOWED_JDUMP", false);
+		}
+        parent::__construct($subject, $params);
+    }
+
+	function onAfterRender() {
+		$mainframe = JFactory::getApplication(); $option = JRequest::getCmd('option');
+
+		if(defined('IP_ALLOWED_JDUMP') && IP_ALLOWED_JDUMP) {
+			if($option == 'com_dump'){
+				return;
+			}
+
+			// settings from config.xml
+			$dumpConfig = JComponentHelper::getParams( 'com_dump' );
+			$autopopup  = $dumpConfig->get( 'autopopup', 1 );
+
+			$userstate = $mainframe->getUserState( 'dump.nodes' );
+
+            $cnt_dumps  = 0;
+            if(isset($userstate) && is_array($userstate)) $cnt_dumps  = count( $userstate );
+
+			if( $autopopup && $cnt_dumps) {
+				DumpHelper::showPopup();
+			}
+		}
+	}
+}
+
+
+/**
+ * Add a variable to the list of variables that will be shown in the debug window
+ * @param mixed $var The variable you want to dump
+ * @param mixed $name The name of the variable you want to dump
+ */
+function dump( $var = null, $name = '(unknown name)', $type = null, $level = 0 )
+{
+	if(defined('IP_ALLOWED_JDUMP') && IP_ALLOWED_JDUMP) {
+		$mainframe = JFactory::getApplication(); 
+		$option = JRequest::getCmd('option');
+
+		require_once JPATH_ADMINISTRATOR.DS.'components'.DS.'com_dump'.DS.'node.php';
+
+		$source = '';
+		if (function_exists('debug_backtrace'))
+		{
+				$trace = debug_backtrace();
+
+				$source = DumpHelper::getSourceFunction($trace);
+				//$source .= '@';
+				$source .= DumpHelper::getSourcePath($trace);
+		}
+
+		// create a new node array
+		$node           = DumpNode::getNode( $var, $name, $type, $level, $source );
+		//get the current userstate
+		$userstate      = $mainframe->getUserState( 'dump.nodes' );
+		// append the node to the array
+		$userstate[]    = $node;
+		// set the userstate to the new array
+		$mainframe->setUserState( 'dump.nodes', $userstate );
+	}
+}
+
+/**
+ * Shortcut to dump the parameters of a template
+ * @param object $var The "$this" object in the template
+ */
+function dumpTemplate( $var, $name = false ) {
+	$name = $name ? $name :  $var->template;
+	dump( $var->params->_registry['parameter']['data'], $name );
+}
+
+/**
+ * Shortcut to dump a message
+ * @param string $msg The message
+ */
+function dumpMessage( $msg = '(Empty message)' ) {
+		dump( $msg, null, 'message', 0 );
+}
+
+/**
+ * Shortcut to dump system information
+ */
+function dumpSysinfo() {
+	if(defined('IP_ALLOWED_JDUMP') && IP_ALLOWED_JDUMP) {
+		require_once JPATH_ADMINISTRATOR.DS.'components'.DS.'com_dump'.DS.'sysinfo.php';
+		$sysinfo = new DumpSysinfo();
+		dump( $sysinfo->data, 'System Information');
+	}
+}
+
+/**
+ * Shortcut to dump the backtrace
+ */
+function dumpTrace()
+{
+	if(defined('IP_ALLOWED_JDUMP') && IP_ALLOWED_JDUMP) {
+		$trace = debug_backtrace();
+
+		$arr = dumpTraceBuild($trace);
+
+		dump($arr, 'Backtrace', 'backtrace');
+	}
+}
+
+function dumpTraceBuild($trace)
+{
+	$ret = array();
+
+	$ret['file']     = $trace[0]['file'];
+	$ret['line']     = $trace[0]['line'];
+	if (isset($trace[0]['class']) && isset($trace[0]['type']))
+		$ret['function'] = $trace[0]['class'].$trace[0]['type'].$trace[0]['function'];
+	else
+		$ret['function'] = $trace[0]['function'];
+	$ret['args']     = $trace[0]['args'];
+
+	array_shift($trace);
+	if (count($trace)>0)
+	{
+		$ret['backtrace'] = dumpTraceBuild($trace);
+	}
+
+	return $ret;
+}
