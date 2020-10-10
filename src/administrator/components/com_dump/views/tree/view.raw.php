@@ -9,16 +9,15 @@
  */
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+jimport( 'joomla.application.component.view');
 JHTML::_('behavior.tooltip');
 
-class DumpViewTree extends JViewLegacy
-{
-    function display($tpl = null)
-    {
+class DumpViewTree extends JViewLegacy {
+    function display($tpl = null) {
         $mainframe = JFactory::getApplication(); $option = JRequest::getCmd('option');
 
         // we need to add these paths so the component can work in both site and administrator
-        $this->addTemplatePath( dirname(__FILE__) . '/tmpl' );
+        $this->addTemplatePath( dirname(__FILE__) . DS . 'tmpl' );
 
         // client information (site, administrator, ... )
         jimport( 'joomla.application.helper' );
@@ -28,7 +27,7 @@ class DumpViewTree extends JViewLegacy
         JRequest::setVar( 'tmpl', 'component' );
 
         // render tree and assign to template
-        $tree = $this->renderTree();
+        $tree =& $this->renderTree();
         $this->assignRef('tree', $tree );
 
         $this->assignRef(	'application',	$client->name );
