@@ -53,6 +53,7 @@ Shortcuts
 // Displays a whole bunch of system information.
 dumpSysinfo();
 ```
+![jdump-shortcut1](https://raw.githubusercontent.com/garstud/jdump/master/res/jdump_shortcut1.png)
 
 ```php
 // Use inside a template's index.php to dump the parameters.
@@ -63,11 +64,13 @@ dumpTemplate($this);
 // Displays a custom message. Very handy to check if a function or a loop is executed etc...
 dumpMessage('Your message');
 ```
+![jdump-shortcut1](https://raw.githubusercontent.com/garstud/jdump/master/res/jdump_shortcut3.png)
 
 ```php
 // Displays the backtrace.
 dumpTrace();
 ```
+![jdump-shortcut1](https://raw.githubusercontent.com/garstud/jdump/master/res/jdump_shortcut4.png)
 
 
 Notes
