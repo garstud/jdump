@@ -81,32 +81,14 @@ J!Dump requires at least Joomla 2.5.5. If you need compatibility with an older v
 
 
 
-Tips
+JDump Tips
 ---------
 
-Tip 1 :
+Tip 1:
 ------------
-If you want to dump an **SQL query of a Query Object**, JDump won't show anything ! ... you have to use the magic method **__toString()** :
+You want to be sure that your web site won't show a **fatal error** if you forget to remove a dump trace in your code, before running in production ?
 
-```php
-$db = JFactory::getDbo();
-$query = $db->getQuery(true);
-$query->select('id, name, email');
-$query->from('#__users');
-$query->order('username DESC');
-
-// display the content of an SQL query
-dump($query->__toString(), "My SQL query to read users");
-
-```
-
-This will show :
-"SELECT id, name, email FROM #__users ORDER BY username DESC"
-
-Tip 2 :
-------------
-You want to be sure that your web site won't show a fatal error if you forget to remove a dump trace in your code, before running in production ?
-In that case, you can add a IF test with 'if(function_exists("dump"))' just before calling "dump()". If the JDump plugin is uninstalled or unpublished, the **dump() method will not be called** :
+In that case, you can add an IF test with '**if(function_exists("dump"))**' just before calling "dump()". If the JDump plugin is uninstalled or unpublished, the **dump() method will not be called** :
 
 ```php
 // ensure dump() is accessible
@@ -125,7 +107,32 @@ This will show :
 
 
 
-Tip 3 :
+Tip 2:
+------------
+If you want to dump an **SQL query of a Query Object**, JDump won't show anything ! ... you have to use the magic method **__toString()** :
+
+```php
+$db = JFactory::getDbo();
+$query = $db->getQuery(true);
+$query->select('id, name, email');
+$query->from('#__users');
+$query->order('username DESC');
+
+// display the content of an SQL query
+dump($query->__toString(), "My SQL query to read users");
+
+```
+
+This will show :
+"SELECT id, name, email FROM #__users ORDER BY username DESC"
+
+
+**Note:** If your SQL request is too long, perhaps JDump will cut the display.
+You can change the length of a variable in the dump window by chanhing the JDump component paramter in admin that is called "**Maximum String Length**".
+
+
+
+Tip 3:
 ------------
 You want to get the **file path of a PHP script that contains a specific object** ?
 You can use the implemention of the **Reflection process** (native PHP 5).
